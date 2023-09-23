@@ -16,7 +16,7 @@ public class TimedTrigger
     
     [FunctionName("TimedTrigger")]
     public async Task RunAsync(
-        [TimerTrigger("0 */5 * * * *")] TimerInfo myTimer,
+        [TimerTrigger("0 */30 * * * *")] TimerInfo myTimer,
         ILogger log)
     {
         var stopwatch = new Stopwatch();
