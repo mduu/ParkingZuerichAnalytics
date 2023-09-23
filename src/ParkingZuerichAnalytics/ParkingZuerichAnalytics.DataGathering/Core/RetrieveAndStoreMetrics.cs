@@ -19,7 +19,7 @@ public class RetrieveAndStoreMetrics
         telemetryClient = new TelemetryClient(telemetryConfiguration);
     }
 
-    public async Task RetrieveAndStore()
+    public Task RetrieveAndStore()
     {
         foreach (var parkingInfo in retriever.Retrieve())
         {
@@ -30,5 +30,7 @@ public class RetrieveAndStoreMetrics
 
             telemetryClient.GetMetric("contentLength").TrackValue(sample);
         }
+
+        return Task.CompletedTask;
     }
 }
