@@ -1,7 +1,6 @@
 using Microsoft.ApplicationInsights;
-using ParkingZuerichAnalytics.DataGathering.Core.Retrieval;
-using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
+using ParkingZuerichAnalytics.DataGathering.Core.Retrieval;
 
 namespace ParkingZuerichAnalytics.DataGathering.Core;
 
@@ -22,6 +21,14 @@ public class RetrieveAndStoreMetrics
     {
         foreach (var parkingInfo in retriever.Retrieve())
         {
+            telemetryClient.TrackMetric(
+                "FreeParkingSlots",
+                parkingInfo.CountFreeSlots,
+                new Dictionary<string, string>
+                {
+                    { "parking", parkingInfo.Name }
+                });
+            
             telemetryClient
                 .GetMetric($"FreeParkingSlots_{parkingInfo.Name}")
                 .TrackValue(metricValue: parkingInfo.CountFreeSlots);
