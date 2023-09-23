@@ -22,12 +22,9 @@ public class RetrieveAndStoreMetrics
     {
         foreach (var parkingInfo in retriever.Retrieve())
         {
-            var sample = new MetricTelemetry();
-            sample.Name = "FreeParkingSlots";
-            sample.Sum = parkingInfo.CountFreeSlots;
-            sample.Properties["parking"] = parkingInfo.Name;
-
-            telemetryClient.GetMetric("contentLength").TrackValue(sample);
+            telemetryClient
+                .GetMetric("FreeParkingSlots")
+                .TrackValue(parkingInfo.CountFreeSlots, parkingInfo.Name);
         }
 
         return Task.CompletedTask;
