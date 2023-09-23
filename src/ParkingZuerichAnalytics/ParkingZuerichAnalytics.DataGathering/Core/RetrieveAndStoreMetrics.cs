@@ -23,8 +23,8 @@ public class RetrieveAndStoreMetrics
         foreach (var parkingInfo in retriever.Retrieve())
         {
             telemetryClient
-                .GetMetric("FreeParkingSlots")
-                .TrackValue(parkingInfo.CountFreeSlots, parkingInfo.Name);
+                .GetMetric($"FreeParkingSlots_{parkingInfo.Name}")
+                .TrackValue(metricValue: parkingInfo.CountFreeSlots);
         }
 
         return Task.CompletedTask;
