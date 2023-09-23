@@ -21,6 +21,17 @@ public class RetrieveAndStoreMetrics
     {
         foreach (var parkingInfo in retriever.Retrieve())
         {
+            telemetryClient.TrackEvent(
+                "FreeParkingSlots",
+                new Dictionary<string, string>
+                {
+                    { "parking", parkingInfo.Name }
+                },
+                new Dictionary<string, double>
+                {
+                    { "FreeParkingSlots", parkingInfo.CountFreeSlots }
+                });
+            
             telemetryClient.TrackMetric(
                 "FreeParkingSlots",
                 parkingInfo.CountFreeSlots,
