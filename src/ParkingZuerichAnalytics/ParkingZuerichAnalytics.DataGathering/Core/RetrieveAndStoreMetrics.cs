@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using ParkingZuerichAnalytics.DataGathering.Core.Retrieval;
 using Microsoft.ApplicationInsights.DataContracts;
