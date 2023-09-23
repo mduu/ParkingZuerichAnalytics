@@ -1,18 +1,22 @@
 using System.Threading.Tasks;
-using ParkingZuerichAnalytics.DataGathering.Core.Retrieval;
 using Microsoft.ApplicationInsights;
+using ParkingZuerichAnalytics.DataGathering.Core.Retrieval;
 using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.ApplicationInsights.Extensibility;
 
 namespace ParkingZuerichAnalytics.DataGathering.Core;
 
 public class RetrieveAndStoreMetrics
 {
     private readonly ParkingInfoRetriever retriever;
-    private TelemetryClient telemetry = new();
+    private readonly TelemetryClient telemetryClient;
 
-    public RetrieveAndStoreMetrics(ParkingInfoRetriever retriever)
+    public RetrieveAndStoreMetrics(
+        ParkingInfoRetriever retriever,
+        TelemetryConfiguration telemetryConfiguration)
     {
         this.retriever = retriever;
+        telemetryClient = new TelemetryClient(telemetryConfiguration);
     }
 
     public async Task RetrieveAndStore()
@@ -24,7 +28,7 @@ public class RetrieveAndStoreMetrics
             sample.Sum = parkingInfo.CountFreeSlots;
             sample.Properties["parking"] = parkingInfo.Name;
 
-            telemetry.TrackMetric(sample);
+            telemetryClient.GetMetric("contentLength").TrackValue(sample);
         }
     }
 }
