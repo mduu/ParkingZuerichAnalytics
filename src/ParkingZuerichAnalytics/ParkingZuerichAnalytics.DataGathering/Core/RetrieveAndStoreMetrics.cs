@@ -42,7 +42,7 @@ public class RetrieveAndStoreMetrics
     {
         var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings:datatableconnection");
         var serviceClient = new TableServiceClient(connectionString);
-        TableClient table = serviceClient.GetTableClient("parking_info");
+        TableClient table = serviceClient.GetTableClient("parkinginfo");
         table.CreateIfNotExists();
         
         return table;
