@@ -40,7 +40,13 @@ public class RetrieveAndStoreMetrics
 
     private static TableClient GetTable()
     {
-        var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings:datatableconnection");
+        var connectionString = Environment.GetEnvironmentVariable(
+            "ConnectionStrings:datatableconnection");
+        if (connectionString is null)
+        {
+            connectionString = Environment.GetEnvironmentVariable(
+                "datatableconnection");
+        }
         var serviceClient = new TableServiceClient(connectionString);
         TableClient table = serviceClient.GetTableClient("parkinginfo");
         table.CreateIfNotExists();
