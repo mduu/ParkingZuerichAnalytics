@@ -1,3 +1,4 @@
+using Azure.Data.Tables;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using ParkingZuerichAnalytics.DataGathering.Core.Retrieval;
@@ -19,32 +20,31 @@ public class RetrieveAndStoreMetrics
 
     public Task RetrieveAndStore()
     {
+        var table = GetTable();
+
         foreach (var parkingInfo in retriever.Retrieve())
         {
-            telemetryClient.TrackEvent(
-                "FreeParkingSlots",
-                new Dictionary<string, string>
+            table.AddEntity(
+                new TableEntity(
+                    "ParkingInfos",
+                    Guid.NewGuid().ToString())
                 {
-                    { "parking", parkingInfo.Name }
-                },
-                new Dictionary<string, double>
-                {
-                    { "FreeParkingSlots", parkingInfo.CountFreeSlots }
+                    { "ParkingName", parkingInfo.Name },
+                    { "Status", parkingInfo.Status },
+                    { "CountFreeSlots", parkingInfo.CountFreeSlots },
                 });
-            
-            telemetryClient.TrackMetric(
-                "FreeParkingSlots",
-                parkingInfo.CountFreeSlots,
-                new Dictionary<string, string>
-                {
-                    { "parking", parkingInfo.Name }
-                });
-            
-            telemetryClient
-                .GetMetric($"FreeParkingSlots_{parkingInfo.Name}")
-                .TrackValue(metricValue: parkingInfo.CountFreeSlots);
         }
 
         return Task.CompletedTask;
+    }
+
+    private static TableClient GetTable()
+    {
+        var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings:datatableconnection");
+        var serviceClient = new TableServiceClient(connectionString);
+        TableClient table = serviceClient.GetTableClient("parking_info");
+        table.CreateIfNotExists();
+        
+        return table;
     }
 }
