@@ -2,7 +2,7 @@ namespace ParkingZuerichAnalytics.DataGathering.Core;
 
 public class ConnectionStringHelper
 {
-    public const string ConnectionStringName = "datatableconnection";
+    public const string ConnectionStringName = "ParkingData";
     
     public static string GetConnectionString()
     {
@@ -12,7 +12,7 @@ public class ConnectionStringHelper
         // Azure Functions App Service 
         if (string.IsNullOrEmpty(connectionString))
         {
-            connectionString = Environment.GetEnvironmentVariable($"{ConnectionStringName}",
+            connectionString = Environment.GetEnvironmentVariable($"AzureWebJobs{ConnectionStringName}",
                 EnvironmentVariableTarget.Process);
         }
 

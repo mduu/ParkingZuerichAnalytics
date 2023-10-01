@@ -16,7 +16,7 @@ public class ManualTrigger
     private readonly RetrieveAndStoreMetrics retrieveAndStoreMetrics = new(new ParkingInfoRetriever());
 
     [FunctionName("ManualTrigger")]
-    [TableOutput("test", Connection = "datatableconnection")]
+    [TableOutput("test", Connection = "Test")]
     public ParkingEntity RunAsync(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]
         HttpRequest req,
