@@ -9,8 +9,7 @@ namespace ParkingZuerichAnalytics.DataGathering;
 public class TimedTrigger
 {
     private readonly RetrieveAndStoreMetrics retrieveAndStoreMetrics = new(
-        new ParkingInfoRetriever(),
-        Environment.GetEnvironmentVariable("ConnectionStrings:datatableconnection"));
+        new ParkingInfoRetriever());
     
     [FunctionName("TimedTrigger")]
     public async Task RunAsync(

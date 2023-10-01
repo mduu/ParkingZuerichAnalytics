@@ -1,6 +1,4 @@
 using Azure.Data.Tables;
-using Microsoft.ApplicationInsights;
-using Microsoft.ApplicationInsights.Extensibility;
 using ParkingZuerichAnalytics.DataGathering.Core.Retrieval;
 
 namespace ParkingZuerichAnalytics.DataGathering.Core;
@@ -11,11 +9,10 @@ public class RetrieveAndStoreMetrics
     private readonly string azureTableStorageConnectionString;
 
     public RetrieveAndStoreMetrics(
-        ParkingInfoRetriever retriever,
-        string azureTableStorageConnectionString)
+        ParkingInfoRetriever retriever)
     {
         this.retriever = retriever;
-        this.azureTableStorageConnectionString = azureTableStorageConnectionString;
+        azureTableStorageConnectionString = ConnectionStringHelper.GetConnectionString();
     }
 
     public Task RetrieveAndStore()
@@ -41,9 +38,12 @@ public class RetrieveAndStoreMetrics
     private TableClient GetTable()
     {
         var serviceClient = new TableServiceClient(azureTableStorageConnectionString);
-        TableClient table = serviceClient.GetTableClient("parkinginfo");
+        var table = serviceClient.GetTableClient("parkinginfo");
+
+#if DEBUG
         table.CreateIfNotExists();
-        
+#endif
+
         return table;
     }
 }
