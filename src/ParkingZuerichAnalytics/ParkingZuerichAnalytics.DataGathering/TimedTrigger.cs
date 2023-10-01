@@ -12,7 +12,7 @@ public class TimedTrigger
 {
     private readonly RetrieveAndStoreMetrics retrieveAndStoreMetrics = new(
         new ParkingInfoRetriever(),
-        new TelemetryConfiguration());
+        Environment.GetEnvironmentVariable("ConnectionStrings:datatableconnection"));
     
     [FunctionName("TimedTrigger")]
     public async Task RunAsync(
@@ -26,6 +26,6 @@ public class TimedTrigger
         await retrieveAndStoreMetrics.RetrieveAndStore();
 
         stopwatch.Stop();
-        log.LogInformation($"Succeeded in {stopwatch.Elapsed.TotalMilliseconds}ms");
+        log.LogInformation("Succeeded in {ElapsedTotalMilliseconds}ms", stopwatch.Elapsed.TotalMilliseconds);
     }
 }

@@ -14,7 +14,7 @@ public class ManualTrigger
 {
     private readonly RetrieveAndStoreMetrics retrieveAndStoreMetrics = new(
         new ParkingInfoRetriever(),
-        new TelemetryConfiguration());
+        Environment.GetEnvironmentVariable("ConnectionStrings:datatableconnection"));
 
     [FunctionName("ManualTrigger")]
     public async Task<IActionResult> RunAsync(
@@ -29,8 +29,8 @@ public class ManualTrigger
         await retrieveAndStoreMetrics.RetrieveAndStore();
 
         stopwatch.Stop();
-        var msg = $"Succeeded in {stopwatch.Elapsed.TotalMilliseconds}ms";
-        log.LogInformation(msg);
-        return new OkObjectResult(msg);
+        log.LogInformation("Succeeded in {ElapsedTotalMilliseconds}ms", stopwatch.Elapsed.TotalMilliseconds);
+        
+        return new OkObjectResult($"Succeeded in {stopwatch.Elapsed.TotalMilliseconds}ms");
     }
 }

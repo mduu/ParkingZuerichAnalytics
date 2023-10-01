@@ -8,14 +8,14 @@ namespace ParkingZuerichAnalytics.DataGathering.Core;
 public class RetrieveAndStoreMetrics
 {
     private readonly ParkingInfoRetriever retriever;
-    private readonly TelemetryClient telemetryClient;
+    private readonly string azureTableStorageConnectionString;
 
     public RetrieveAndStoreMetrics(
         ParkingInfoRetriever retriever,
-        TelemetryConfiguration telemetryConfiguration)
+        string azureTableStorageConnectionString)
     {
         this.retriever = retriever;
-        telemetryClient = new TelemetryClient(telemetryConfiguration);
+        this.azureTableStorageConnectionString = azureTableStorageConnectionString;
     }
 
     public Task RetrieveAndStore()
@@ -38,16 +38,9 @@ public class RetrieveAndStoreMetrics
         return Task.CompletedTask;
     }
 
-    private static TableClient GetTable()
+    private TableClient GetTable()
     {
-        var connectionString = Environment.GetEnvironmentVariable(
-            "ConnectionStrings:datatableconnection");
-        if (connectionString is null)
-        {
-            connectionString = Environment.GetEnvironmentVariable(
-                "datatableconnection");
-        }
-        var serviceClient = new TableServiceClient(connectionString);
+        var serviceClient = new TableServiceClient(azureTableStorageConnectionString);
         TableClient table = serviceClient.GetTableClient("parkinginfo");
         table.CreateIfNotExists();
         
