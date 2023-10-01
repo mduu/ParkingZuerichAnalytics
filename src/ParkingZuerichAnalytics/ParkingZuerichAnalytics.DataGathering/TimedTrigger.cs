@@ -1,6 +1,4 @@
 using System.Diagnostics;
-using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using ParkingZuerichAnalytics.DataGathering.Core;
