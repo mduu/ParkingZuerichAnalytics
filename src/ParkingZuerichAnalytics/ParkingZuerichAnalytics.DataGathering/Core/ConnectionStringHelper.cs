@@ -12,7 +12,7 @@ public class ConnectionStringHelper
         // Azure Functions App Service 
         if (string.IsNullOrEmpty(connectionString))
         {
-            connectionString = Environment.GetEnvironmentVariable($"AzureWebJobs{ConnectionStringName}",
+            connectionString = Environment.GetEnvironmentVariable($"CUSTOMCONNSTR_{ConnectionStringName}",
                 EnvironmentVariableTarget.Process);
         }
 
