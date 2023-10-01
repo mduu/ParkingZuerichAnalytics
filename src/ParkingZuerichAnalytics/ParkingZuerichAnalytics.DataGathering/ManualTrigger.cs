@@ -26,7 +26,15 @@ public class ManualTrigger
         stopwatch.Start();
         log.LogInformation("Manuel trigger");
 
-        await retrieveAndStoreMetrics.RetrieveAndStore();
+        try
+        {
+            await retrieveAndStoreMetrics.RetrieveAndStore();
+        }
+        catch (Exception e)
+        {
+            log.LogError(e, "Error in RetrieveAndStore()");
+            throw;
+        }
 
         stopwatch.Stop();
         log.LogInformation("Succeeded in {ElapsedTotalMilliseconds}ms", stopwatch.Elapsed.TotalMilliseconds);

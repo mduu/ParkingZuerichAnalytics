@@ -21,8 +21,16 @@ public class TimedTrigger
         stopwatch.Start();
         log.LogInformation("Timer trigger");
 
-        await retrieveAndStoreMetrics.RetrieveAndStore();
-
+        try
+        {
+            await retrieveAndStoreMetrics.RetrieveAndStore();
+        }
+        catch (Exception e)
+        {
+            log.LogError(e, "Error in RetrieveAndStore()");
+            throw;
+        }
+        
         stopwatch.Stop();
         log.LogInformation("Succeeded in {ElapsedTotalMilliseconds}ms", stopwatch.Elapsed.TotalMilliseconds);
     }
