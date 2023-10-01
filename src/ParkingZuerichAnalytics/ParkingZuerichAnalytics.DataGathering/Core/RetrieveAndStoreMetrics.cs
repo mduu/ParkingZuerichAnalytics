@@ -21,15 +21,7 @@ public class RetrieveAndStoreMetrics
 
         foreach (var parkingInfo in retriever.Retrieve())
         {
-            table.AddEntity(
-                new TableEntity(
-                    "ParkingInfos",
-                    Guid.NewGuid().ToString())
-                {
-                    { "ParkingName", parkingInfo.Name },
-                    { "Status", parkingInfo.Status },
-                    { "CountFreeSlots", parkingInfo.CountFreeSlots },
-                });
+            table.AddEntity(ParkingEntity.Create(parkingInfo));
         }
 
         return Task.CompletedTask;

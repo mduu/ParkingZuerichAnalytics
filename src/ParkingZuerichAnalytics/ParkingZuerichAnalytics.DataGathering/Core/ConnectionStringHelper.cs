@@ -11,8 +11,10 @@ public class ConnectionStringHelper
 
         // Azure Functions App Service 
         if (string.IsNullOrEmpty(connectionString))
-            connectionString = Environment.GetEnvironmentVariable($"SQLAZURECONNSTR_{ConnectionStringName}", 
+        {
+            connectionString = Environment.GetEnvironmentVariable($"{ConnectionStringName}",
                 EnvironmentVariableTarget.Process);
+        }
 
         return connectionString;
     }

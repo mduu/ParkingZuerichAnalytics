@@ -17,7 +17,7 @@ public class ManualTrigger
 
     [FunctionName("ManualTrigger")]
     [TableOutput("test", Connection = "datatableconnection")]
-    public async Task<ParkingInfo> RunAsync(
+    public ParkingEntity RunAsync(
         [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]
         HttpRequest req,
         ILogger log)
@@ -25,8 +25,8 @@ public class ManualTrigger
         // var stopwatch = new Stopwatch();
         // stopwatch.Start();
         log.LogInformation("Manuel trigger");
-        
-        return new ParkingInfo("TestParking", "Open", 42);
+
+        return ParkingEntity.Create(new ParkingInfo("TestParking", "Open", 42));
 
         // try
         // {
