@@ -23,10 +23,15 @@ public class ParkingInfoRetriever
                 ? string.Join(' ', titleParts[0].Split(' ').Skip(1))
                 : titleParts[0];
 
+            var url = item.Links.FirstOrDefault()?.Uri.ToString();
+
             yield return new ParkingInfo(
                 title,
                 summaryParts[0],
-                numberOfFreeSlots);
+                numberOfFreeSlots,
+                titleParts[0],
+                titleParts[1],
+                url);
         }
     }
 }

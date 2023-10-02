@@ -1,23 +1,24 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using ParkingZuerichAnalytics.DataGathering.Core;
 using ParkingZuerichAnalytics.DataGathering.Core.Retrieval;
 
 namespace ParkingZuerichAnalytics.DataGathering;
 
-public class TimedTrigger
+public class ManuelTrigger
 {
     private readonly RetrieveAndStore retrieveAndStore = new(new ParkingInfoRetriever());
-    
-    [FunctionName("TimedTrigger")]
-    public async Task RunAsync(
-        [TimerTrigger("0 */30 * * * *")] TimerInfo myTimer,
-        ILogger log)
+
+    [FunctionName("ManuelTrigger")]
+    public async Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
     {
         var stopwatch = new Stopwatch();
         stopwatch.Start();
-        log.LogInformation("Timer trigger");
+        log.LogInformation("Manual trigger");
 
         try
         {
@@ -28,8 +29,10 @@ public class TimedTrigger
             log.LogError(e, "Error in RetrieveAndStore.Run()");
             throw;
         }
-        
+
         stopwatch.Stop();
-        log.LogInformation("Succeeded in {ElapsedTotalMilliseconds}ms", stopwatch.Elapsed.TotalMilliseconds);
+        log.LogInformation("Manual trigger succeeded in {ElapsedTotalMilliseconds}ms", stopwatch.Elapsed.TotalMilliseconds);
+
+        return new OkResult();
     }
 }

@@ -3,39 +3,28 @@ using ParkingZuerichAnalytics.DataGathering.Core.Retrieval;
 
 namespace ParkingZuerichAnalytics.DataGathering.Core;
 
-public class RetrieveAndStoreMetrics
+public class RetrieveAndStore
 {
     private readonly ParkingInfoRetriever retriever;
     private readonly string azureTableStorageConnectionString;
 
-    public RetrieveAndStoreMetrics(
+    public RetrieveAndStore(
         ParkingInfoRetriever retriever)
     {
         this.retriever = retriever;
         azureTableStorageConnectionString = ConnectionStringHelper.GetConnectionString();
     }
 
-    public Task RetrieveAndStore()
+    public async Task Run()
     {
-        var table = GetTable();
+        var serviceClient = new TableServiceClient(azureTableStorageConnectionString);
+        var parkingInfoTable = serviceClient.GetTableClient("parkinginfo");
+        var parkingAddressTable = serviceClient.GetTableClient("parkingaddress");
 
         foreach (var parkingInfo in retriever.Retrieve())
         {
-            table.AddEntity(ParkingEntity.Create(parkingInfo));
+            await parkingInfoTable.AddEntityAsync(ParkingEntity.Create(parkingInfo));
+            await parkingAddressTable.UpsertEntityAsync(ParkingAddressEntity.Create(parkingInfo));
         }
-
-        return Task.CompletedTask;
-    }
-
-    private TableClient GetTable()
-    {
-        var serviceClient = new TableServiceClient(azureTableStorageConnectionString);
-        var table = serviceClient.GetTableClient("parkinginfo");
-
-#if DEBUG
-        table.CreateIfNotExists();
-#endif
-
-        return table;
     }
 }
