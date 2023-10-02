@@ -20,7 +20,7 @@ public class ParkingEntity : Azure.Data.Tables.ITableEntity
         => new()
         {
             PartitionKey = parkingInfo.Name,
-            RowKey = Guid.NewGuid().ToString("D"),
+            RowKey = DateTimeOffset.Now.ToString("u"),
             Timestamp = DateTimeOffset.Now,
             ETag = default,
             ParkingName = parkingInfo.Name,
