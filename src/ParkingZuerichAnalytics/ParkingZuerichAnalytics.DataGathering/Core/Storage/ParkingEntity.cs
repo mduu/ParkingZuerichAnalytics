@@ -1,7 +1,7 @@
 using Azure;
 using ParkingZuerichAnalytics.DataGathering.Core.Retrieval;
 
-namespace ParkingZuerichAnalytics.DataGathering.Core;
+namespace ParkingZuerichAnalytics.DataGathering.Core.Storage;
 
 public class ParkingEntity : Azure.Data.Tables.ITableEntity
 {

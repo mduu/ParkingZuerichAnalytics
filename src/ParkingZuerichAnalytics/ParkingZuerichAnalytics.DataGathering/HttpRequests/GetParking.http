@@ -1,0 +1,3 @@
+### GET Pakrings
+GET {{host}}/api/parking?code={{DefaultKey}}
+Content-Type: application/json

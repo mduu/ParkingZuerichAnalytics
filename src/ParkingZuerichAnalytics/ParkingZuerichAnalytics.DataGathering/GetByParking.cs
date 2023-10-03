@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ParkingZuerichAnalytics.DataGathering.Core;
 using ParkingZuerichAnalytics.DataGathering.Core.Retrieval;
+using ParkingZuerichAnalytics.DataGathering.Core.Storage;
 
 namespace ParkingZuerichAnalytics.DataGathering;
 
@@ -46,12 +47,24 @@ public class GetByParking
             from.ToString("g"),
             to.ToString("g"));
 
-        var result = await retrieveAndStore.GetByParking(
-            name,
-            from,
-            to);
-        
-        log.LogDebug("Count ParkingInfos {Count}", result.Length);
+        var serviceClient = TableStorageHelper.GetClient();
+        var parkingInfoTable = serviceClient.GetParkingInfoTable();
+
+        var result = await parkingInfoTable.QueryAsync<ParkingEntity>(
+                x => x.PartitionKey == name)
+            .Where(p =>
+                p.Timestamp >= from &&
+                p.Timestamp <= to)
+            .Select(e => new
+            {
+                e.ParkingName,
+                e.Timestamp,
+                e.CountFreeSlots,
+                e.Status,
+            })
+            .ToArrayAsync();
+
+        log.LogDebug("Count ParkingInfos {Count}", result.Count());
 
         return new OkObjectResult(result);
     }

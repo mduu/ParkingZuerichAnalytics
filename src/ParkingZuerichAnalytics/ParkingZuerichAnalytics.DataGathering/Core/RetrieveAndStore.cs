@@ -1,46 +1,27 @@
-using Azure.Data.Tables;
 using ParkingZuerichAnalytics.DataGathering.Core.Retrieval;
+using ParkingZuerichAnalytics.DataGathering.Core.Storage;
 
 namespace ParkingZuerichAnalytics.DataGathering.Core;
 
 public class RetrieveAndStore
 {
     private readonly ParkingInfoRetriever retriever;
-    private readonly string azureTableStorageConnectionString;
 
-    public RetrieveAndStore(
-        ParkingInfoRetriever retriever)
+    public RetrieveAndStore(ParkingInfoRetriever retriever)
     {
         this.retriever = retriever;
-        azureTableStorageConnectionString = ConnectionStringHelper.GetConnectionString();
     }
 
     public async Task Update()
     {
-        var serviceClient = new TableServiceClient(azureTableStorageConnectionString);
-        var parkingInfoTable = serviceClient.GetTableClient("parkinginfo");
-        var parkingAddressTable = serviceClient.GetTableClient("parkingaddress");
+        var serviceClient = TableStorageHelper.GetClient();
+        var parkingInfoTable = serviceClient.GetParkingInfoTable();
+        var parkingAddressTable = serviceClient.GetParkingAddressTable();
 
         foreach (var parkingInfo in retriever.Retrieve())
         {
             await parkingInfoTable.AddEntityAsync(ParkingEntity.Create(parkingInfo));
             await parkingAddressTable.UpsertEntityAsync(ParkingAddressEntity.Create(parkingInfo));
         }
-    }
-
-    public async Task<ParkingEntity[]> GetByParking(
-        string parkingName,
-        DateTimeOffset fromTime,
-        DateTimeOffset toTime)
-    {
-        var serviceClient = new TableServiceClient(azureTableStorageConnectionString);
-        var parkingInfoTable = serviceClient.GetTableClient("parkinginfo");
-
-        return (await parkingInfoTable.QueryAsync<ParkingEntity>(
-                x => x.PartitionKey == parkingName)
-            .Where(p =>
-                p.Timestamp >= fromTime &&
-                p.Timestamp <= toTime)
-            .ToArrayAsync());
     }
 }

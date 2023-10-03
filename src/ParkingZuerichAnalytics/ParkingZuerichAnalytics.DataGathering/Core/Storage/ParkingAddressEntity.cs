@@ -1,11 +1,12 @@
 using Azure;
 using ParkingZuerichAnalytics.DataGathering.Core.Retrieval;
 
-namespace ParkingZuerichAnalytics.DataGathering.Core;
+namespace ParkingZuerichAnalytics.DataGathering.Core.Storage;
 
 public class ParkingAddressEntity : Azure.Data.Tables.ITableEntity
 {
-    public string PartitionKey { get; set; }
+    public const string ThePartitionKey = "ParkingAddress";
+    public string PartitionKey { get; set; } = ThePartitionKey;
     public string RowKey { get; set; }
     public DateTimeOffset? Timestamp { get; set; }
     public ETag ETag { get; set; }
@@ -17,7 +18,7 @@ public class ParkingAddressEntity : Azure.Data.Tables.ITableEntity
     public static ParkingAddressEntity Create(ParkingInfo parkingInfo)
         => new()
         {
-            PartitionKey = "ParkingAddress",
+            PartitionKey = ThePartitionKey,
             RowKey = parkingInfo.Name,
             Timestamp = DateTimeOffset.Now,
             ETag = default,
