@@ -36,12 +36,11 @@ public class RetrieveAndStore
         var serviceClient = new TableServiceClient(azureTableStorageConnectionString);
         var parkingInfoTable = serviceClient.GetTableClient("parkinginfo");
 
-        return await parkingInfoTable.QueryAsync<ParkingEntity>(
-            x => x.PartitionKey == parkingName)
-            // .Where(p => 
-            //     p.Timestamp is null ||(
-            //     p.Timestamp.Value >= fromTime &&
-            //     p.Timestamp.Value <= toTime))
-            .ToArrayAsync();
+        return (await parkingInfoTable.QueryAsync<ParkingEntity>(
+                x => x.PartitionKey == parkingName)
+            .Where(p =>
+                p.Timestamp >= fromTime &&
+                p.Timestamp <= toTime)
+            .ToArrayAsync());
     }
 }

@@ -33,7 +33,7 @@ public class GetByParking
         var fromParam = req.Query["from"].FirstOrDefault();
         var from = fromParam is not null
             ? DateTimeOffset.Parse(fromParam)
-            : DateTimeOffset.UtcNow.AddDays(14);
+            : DateTimeOffset.UtcNow.AddDays(-14);
 
         var toParam = req.Query["to"].FirstOrDefault();
         var to = toParam is not null
@@ -48,8 +48,8 @@ public class GetByParking
 
         var result = await retrieveAndStore.GetByParking(
             name,
-            to,
-            from);
+            from,
+            to);
         
         log.LogDebug("Count ParkingInfos {Count}", result.Length);
 
