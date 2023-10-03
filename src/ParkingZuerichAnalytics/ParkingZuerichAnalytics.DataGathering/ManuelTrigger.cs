@@ -22,7 +22,7 @@ public class ManuelTrigger
 
         try
         {
-            await retrieveAndStore.Run();
+            await retrieveAndStore.Update();
         }
         catch (Exception e)
         {

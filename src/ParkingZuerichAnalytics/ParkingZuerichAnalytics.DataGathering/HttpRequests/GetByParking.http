@@ -1,0 +1,8 @@
+### Get with default from/to date
+GET {{host}}/api/parking/Accu
+
+### Get with custom from date
+GET {{host}}/api/parking/Accu?from=2023-10-13
+
+### Get with custom from and to date
+GET {{host}}/api/parking/Accu?from=2023-10-13&to=2023-10-13

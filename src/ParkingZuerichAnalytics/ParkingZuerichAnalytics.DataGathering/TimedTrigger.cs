@@ -21,7 +21,7 @@ public class TimedTrigger
 
         try
         {
-            await retrieveAndStore.Run();
+            await retrieveAndStore.Update();
         }
         catch (Exception e)
         {
