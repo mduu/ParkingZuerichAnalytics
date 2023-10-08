@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - src/parkingzuerich-app/**
+      - .github/workflows/app_parkingzuerichanalytics.yml
   workflow_dispatch:
     
 defaults:
@@ -39,7 +40,7 @@ jobs:
         uses: azure/CLI@v1
         with:
           inlineScript: |
-            az storage blob upload-batch --account-name parkingzuerichapp  --auth-mode key -d '$web' -s ./out
+            az storage blob upload-batch --account-name parkingzuerichapp  --auth-mode key -d '$web' -s ./src/parkingzuerich-app/out
             
 #      - name: Purge CDN endpoint
 #        uses: azure/CLI@v1
