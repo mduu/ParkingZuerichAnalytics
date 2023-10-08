@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { ParkingAddress } from "@/app/_models/ParkingAddress";
 
 async function getData(): Promise<ParkingAddress[]> {
-    const res = await fetch('https://parkingzuerichanalytics.azurewebsites.net/api/parking?code=dduM8-mNw2DNH65g0eV8SrRoe-5hm92FzkXw4KjHrT2PAzFupfKKqw==')
+    const res = await fetch('https://parkingzuerichanalytics.azurewebsites.net/api/parking')
     // The return value is *not* serialized
     // You can return Date, Map, Set, etc.
 

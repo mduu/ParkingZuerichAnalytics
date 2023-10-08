@@ -22,7 +22,7 @@ public class GetByParking
     [FunctionName("GetByParking")]
     public async Task<IActionResult> Run(
         [HttpTrigger(
-            AuthorizationLevel.Function,
+            AuthorizationLevel.Anonymous,
             "get",
             Route = "parking/{name}")]
         HttpRequest req,
