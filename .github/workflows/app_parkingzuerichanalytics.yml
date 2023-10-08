@@ -1,0 +1,29 @@
+name: App - Build and deploy - ParkingZuerichAnalytics
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - src/parkingzuerich-app/**
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v2
+        
+      - name: 'Install NodeJS'
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      
+      - name: 'Install packages'
+        run: 'npm install'
+        
+      - name: 'Build static site'
+        run: 'npm run build'
+        
+      - 
