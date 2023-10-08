@@ -25,5 +25,3 @@ jobs:
         
       - name: 'Build static site'
         run: 'npm run build'
-        
-      - 
