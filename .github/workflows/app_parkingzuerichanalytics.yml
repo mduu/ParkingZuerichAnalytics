@@ -37,10 +37,9 @@ jobs:
 
       - name: Upload to blob storage
         uses: azure/CLI@v1
-        working-directory: ./src/parkingzuerich-app/out
         with:
           inlineScript: |
-            az storage blob upload-batch --account-name parkingzuerichapp  --auth-mode key -d '$web' -s .
+            az storage blob upload-batch --account-name parkingzuerichapp  --auth-mode key -d '$web' -s ./out
             
 #      - name: Purge CDN endpoint
 #        uses: azure/CLI@v1
