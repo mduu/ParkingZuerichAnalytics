@@ -7,11 +7,14 @@ on:
     paths:
       - src/parkingzuerich-app/**
   workflow_dispatch:
+    
+defaults:
+  run:
+    working-directory: ./src/parkingzuerich-app
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    working-directory: src/parkingzuerich-app
     steps:
       - name: Checkout GitHub Action
         uses: actions/checkout@v2
