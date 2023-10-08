@@ -11,17 +11,18 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    working-directory: src/parkingzuerich-app
     steps:
-      - name: 'Checkout GitHub Action'
+      - name: Checkout GitHub Action
         uses: actions/checkout@v2
         
-      - name: 'Install NodeJS'
+      - name: Install NodeJS
         uses: actions/setup-node@v1
         with:
-          node-version: 12
-      
-      - name: 'Install packages'
-        run: 'npm install'
+          node-version: 18
+          
+      - name: Install packages
+        run: npm install
         
-      - name: 'Build static site'
-        run: 'npm run build'
+      - name: Build static site
+        run: npm run build
