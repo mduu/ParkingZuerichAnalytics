@@ -9,6 +9,7 @@ on:
       - main
     paths:
       - src/ParkingZuerichAnalytics/**
+      - .github/workflows/backend_parkingzuerichanalytics.yml
   workflow_dispatch:
 
 env:
