@@ -21,10 +21,10 @@ export default function RootLayout({
                 <CssBaseline/>
                 <Sheet variant="outlined"
                        sx={{
-                           width: 300,
-                           mx: 'auto', // margin left & right
-                           my: 4, // margin top & bottom
-                           py: 3, // padding top & bottom
+                           width: 'auto',
+                           mx: 2, // margin left & right
+                           my: 2, // margin top & bottom
+                           py: 2, // padding top & bottom
                            px: 2, // padding left & right
                            display: 'flex',
                            flexDirection: 'column',
