@@ -1,14 +1,15 @@
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 import { ParkingAddress } from "@/src/models";
+import { Select, Option } from "@mui/joy";
 
 export function ParkingPicker(props: { parkings: ParkingAddress[] }) {
     return (
         <Fragment>
-            <ul>
+            <Select defaultValue="dog">
                 {props.parkings.map(p => (
-                    <li key={p.parkingName}>{p.title}</li>
+                    <Option key={p.parkingName} value={p.parkingName}>{p.title}</Option>
                 ))}
-            </ul>
+            </Select>
         </Fragment>
     );
 }
