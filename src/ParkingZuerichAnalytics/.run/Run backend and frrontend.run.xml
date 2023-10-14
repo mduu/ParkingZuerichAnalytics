@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run backend and frrontend" type="CompoundRunConfigurationType">
+    <toRun name="ParkingZuerichAnalytics.DataGathering" type="AzureFunctionsHost" />
+    <toRun name="Run app local" type="js.build_tools.npm" />
+    <method v="2" />
+  </configuration>
+</component>

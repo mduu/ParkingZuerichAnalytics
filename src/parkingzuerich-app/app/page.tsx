@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { ParkingAddress } from "@/app/_models/ParkingAddress";
+import { ParkingAddress } from "@/src/models";
 
 async function getData(): Promise<ParkingAddress[]> {
     const res = await fetch('https://parkingzuerichanalytics.azurewebsites.net/api/parking')
