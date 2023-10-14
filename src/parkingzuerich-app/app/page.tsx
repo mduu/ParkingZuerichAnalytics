@@ -3,11 +3,10 @@
 import '@fontsource/inter';
 import { ParkingAddress } from "@/src/models";
 import { ParkingPicker } from "@/app/components";
+import { Typography } from "@mui/joy";
 
 async function getData(): Promise<ParkingAddress[]> {
     const res = await fetch('https://parkingzuerichanalytics.azurewebsites.net/api/parking')
-    // The return value is *not* serialized
-    // You can return Date, Map, Set, etc.
 
     if (!res.ok) {
         // This will activate the closest `error.js` Error Boundary
@@ -21,8 +20,10 @@ export default async function Home() {
     const data = await getData();
 
     return (
-        <main>
-            <ParkingPicker parkings={data} />
-        </main>
-    )
+        <div>
+            <Typography level="h1">Parking Zürich Analytics</Typography>
+            <Typography level="body-md">Choose a parking:</Typography>
+            <ParkingPicker parkings={data}/>
+        </div>
+)
 }

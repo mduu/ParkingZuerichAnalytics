@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { CssBaseline, CssVarsProvider } from "@mui/joy";
+import { CssBaseline, CssVarsProvider, Sheet } from "@mui/joy";
 
 const inter = Inter({subsets: ['latin']})
 
@@ -18,12 +18,23 @@ export default function RootLayout({
         <html lang="en">
         <body className={inter.className}>
             <CssVarsProvider>
-                {/* must be used under CssVarsProvider */}
                 <CssBaseline/>
-    
-                {/* The rest of your application */}
+                <Sheet variant="outlined"
+                       sx={{
+                           width: 300,
+                           mx: 'auto', // margin left & right
+                           my: 4, // margin top & bottom
+                           py: 3, // padding top & bottom
+                           px: 2, // padding left & right
+                           display: 'flex',
+                           flexDirection: 'column',
+                           gap: 2,
+                           borderRadius: 'sm',
+                           boxShadow: 'md',
+                       }}>
+                    {children}
+                </Sheet>
             </CssVarsProvider>
-            {children}
         </body>
         </html>
     )
