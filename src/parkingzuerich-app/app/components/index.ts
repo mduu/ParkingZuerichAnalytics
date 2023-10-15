@@ -1,1 +1,2 @@
-export {ParkingPicker} from "./ParkingPicker"
+export { ParkingPicker } from "./ParkingPicker";
+export { ParkingSlotChart } from "./ParkingSlotChart";
