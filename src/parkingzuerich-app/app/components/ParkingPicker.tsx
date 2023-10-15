@@ -1,6 +1,6 @@
-import { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { ParkingAddress } from "@/src/models";
-import { Select, Option } from "@mui/joy";
+import { Select, Option, LinearProgress } from "@mui/joy";
 
 const apiUrl: string = 'https://parkingzuerichanalytics.azurewebsites.net/api/parking';
 
@@ -16,7 +16,14 @@ export function ParkingPicker({selectedParking, onParkingSelected} : ParkingPick
 
     useEffect(() => {
         fetch(apiUrl)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(
+                        `This is an HTTP error: The status is ${response.status}`
+                    );
+                }
+                return response.json();
+            })
             .then(data => {
                 setData(data);
                 setLoading(false);
@@ -31,7 +38,7 @@ export function ParkingPicker({selectedParking, onParkingSelected} : ParkingPick
         onParkingSelected(newValue);
     };
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <LinearProgress size="sm" variant="soft" />;
     if (error) return <p>Error: {error.message}</p>;
     
     return (
