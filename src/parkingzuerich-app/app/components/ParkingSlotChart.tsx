@@ -1,8 +1,17 @@
 'use client'
 
-import { LinearProgress, Table, Typography } from "@mui/joy";
 import { useEffect, useState } from "react";
 import { ParkingSlots } from "@/src/models";
+import {
+    LinearProgress,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow
+} from "@mui/material";
 
 const apiUrl: string = 'https://parkingzuerichanalytics.azurewebsites.net//api/parking/';
 
@@ -26,7 +35,7 @@ export function ParkingSlotChart({selectedParking}: ParkingSlotChartProps) {
                 return response.json();
             })
             .then(data => {
-                data = data?.map((d: ParkingSlots): ParkingSlots  => {
+                data = data?.map((d: ParkingSlots): ParkingSlots => {
                     return {
                         ...d,
                         timestamp: new Date(d.timestamp)
@@ -41,31 +50,31 @@ export function ParkingSlotChart({selectedParking}: ParkingSlotChartProps) {
             });
     }, [selectedParking]);
 
-    if (loading) return <LinearProgress size="sm" variant="soft" />;
+    if (loading) return <LinearProgress/>;
     if (error) return <p>Error: {error.message}</p>;
-    
+
     return (
-        <div>
-            <Typography level="h4">Available parking slots at {selectedParking}:</Typography>
-            
+        <TableContainer component={Paper}>
             <Table stickyHeader sx={{'& tr > *:not(:first-child)': {textAlign: 'right'}}}>
-                <thead>
-                <tr>
-                    <th>Time</th>
-                    <th>Free slots</th>
-                    <th>Status</th>
-                </tr>
-                </thead>
-                <tbody>
-                {data?.map((d, i) => (
-                    <tr key={i}>
-                        <td>{d.timestamp.toLocaleString()}</td>
-                        <td>{d.countFreeSlots}</td>
-                        <td>{d.status}</td>
-                    </tr>
-                ))}
-                </tbody>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Time</TableCell>
+                        <TableCell>Free slots</TableCell>
+                        <TableCell>Status</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {data?.map((d, i) => (
+                        <TableRow
+                            key={i}
+                            sx={{'&:last-child td, &:last-child th': {border: 0}}}>
+                            <TableCell>{d.timestamp.toLocaleString()}</TableCell>
+                            <TableCell align="right">{d.countFreeSlots}</TableCell>
+                            <TableCell align="right">{d.status}</TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
             </Table>
-        </div>
+        </TableContainer>
     )
 }
