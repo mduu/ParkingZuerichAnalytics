@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from "react";
+import { useState } from 'react';
 import '@fontsource/inter';
-import { Typography } from "@mui/joy";
-import { ParkingPicker, ParkingSlotChart } from "@/app/components";
+import { Typography } from '@mui/joy';
+import { ParkingPicker, ParkingSlotChart } from '@/app/components';
 
 export default function Home() {
     const [selectedParking, setSelectedParking] = useState<string | null>(null);
