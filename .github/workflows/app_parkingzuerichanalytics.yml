@@ -40,7 +40,7 @@ jobs:
         uses: azure/CLI@v1
         with:
           inlineScript: |
-            az storage blob upload-batch --account-name parkingzuerichapp  --auth-mode key -d '$web' -s ./src/parkingzuerich-app/out
+            az storage blob upload-batch --account-name parkingzuerichapp --overwrite --auth-mode key -d '$web' -s ./src/parkingzuerich-app/out
             
 #      - name: Purge CDN endpoint
 #        uses: azure/CLI@v1
