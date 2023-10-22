@@ -61,8 +61,7 @@ export function ParkingSlotChart({selectedParking}: ParkingSlotChartProps) {
 
     if (loading) return <LinearProgress/>;
     if (error) return <p>Error: {error.message}</p>;
-
-    if (!data || data?.length == 0) return <Typography variant={"body1"}>No data</Typography>
+    if (!data || data.length == 0) return;
     
     const currentWeekStart = subtractDays(new Date(), 7);
     
@@ -75,13 +74,18 @@ export function ParkingSlotChart({selectedParking}: ParkingSlotChartProps) {
 
     const xLabels = data
         .filter(p => p.timestamp > currentWeekStart)
-        .map(p => (p.timestamp.toLocaleString()));
+        .map(p => (p.timestamp));
     
     return (
         <div>
             {data &&
                 <LineChart
-                    xAxis={[{ scaleType: 'point', data: xLabels }]}
+                    xAxis={[{ 
+                        scaleType: 'time',
+                        data: xLabels,
+                        disableTicks: true,
+                        disableLine: true,
+                    }]}
                     series={[
                         { 
                             data: yCurrentWeek, 
