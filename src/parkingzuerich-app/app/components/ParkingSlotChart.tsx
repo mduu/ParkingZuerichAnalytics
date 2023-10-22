@@ -12,11 +12,19 @@ import {
     TableHead,
     TableRow
 } from "@mui/material";
+import { LineChart } from "@mui/x-charts";
+import Typography from "@mui/material/Typography";
+import { Colorize, ColorLens } from "@mui/icons-material";
 
 const apiUrl: string = 'https://parkingzuerichanalytics.azurewebsites.net//api/parking/';
 
 interface ParkingSlotChartProps {
     selectedParking: string | null,
+}
+
+function subtractDays(date:Date, days: number) {
+    date.setDate(date.getDate() - days);
+    return date;
 }
 
 export function ParkingSlotChart({selectedParking}: ParkingSlotChartProps) {
@@ -25,7 +33,8 @@ export function ParkingSlotChart({selectedParking}: ParkingSlotChartProps) {
     const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
-        fetch(`${apiUrl}${selectedParking}`)
+        const queryFrom= subtractDays(new Date(), 14).toISOString();
+        fetch(`${apiUrl}${selectedParking}?from=${queryFrom}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(
@@ -53,28 +62,70 @@ export function ParkingSlotChart({selectedParking}: ParkingSlotChartProps) {
     if (loading) return <LinearProgress/>;
     if (error) return <p>Error: {error.message}</p>;
 
+    if (!data || data?.length == 0) return <Typography variant={"body1"}>No data</Typography>
+    
+    const currentWeekStart = subtractDays(new Date(), 7);
+    
+    const yCurrentWeek = data
+        .filter(p => p.timestamp > currentWeekStart)
+        .map(p => (p.countFreeSlots));
+    const yWeekBefore = data
+        .filter(p => p.timestamp < currentWeekStart)
+        .map(p => (p.countFreeSlots));
+
+    const xLabels = data
+        .filter(p => p.timestamp > currentWeekStart)
+        .map(p => (p.timestamp.toLocaleString()));
+    
     return (
-        <TableContainer component={Paper}>
-            <Table stickyHeader sx={{'& tr > *:not(:first-child)': {textAlign: 'right'}}}>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Time</TableCell>
-                        <TableCell>Free slots</TableCell>
-                        <TableCell>Status</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {data?.map((d, i) => (
-                        <TableRow
-                            key={i}
-                            sx={{'&:last-child td, &:last-child th': {border: 0}}}>
-                            <TableCell>{d.timestamp.toLocaleString()}</TableCell>
-                            <TableCell align="right">{d.countFreeSlots}</TableCell>
-                            <TableCell align="right">{d.status}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <div>
+            {data &&
+                <LineChart
+                    xAxis={[{ scaleType: 'point', data: xLabels }]}
+                    series={[
+                        { 
+                            data: yCurrentWeek, 
+                            label: 'This week free parking slots', 
+                            showMark: false,
+                            color: 'DodgerBlue',
+                            curve: "catmullRom",
+                        },
+                        { 
+                            data: yWeekBefore, 
+                            label: 'Week before free parking slots', 
+                            showMark: false,
+                            color: 'DeepSkyBlue',
+                            curve: "catmullRom",
+                        },
+                    ]}
+                    height={300}
+                />
+            }
+
+            {data &&
+                <TableContainer component={Paper}>
+                    <Table stickyHeader sx={{'& tr > *:not(:first-child)': {textAlign: 'right'}}}>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Time</TableCell>
+                                <TableCell>Free slots</TableCell>
+                                <TableCell>Status</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {data.map((d, i) => (
+                                <TableRow
+                                    key={i}
+                                    sx={{'&:last-child td, &:last-child th': {border: 0}}}>
+                                    <TableCell>{d.timestamp.toLocaleString()}</TableCell>
+                                    <TableCell align="right">{d.countFreeSlots}</TableCell>
+                                    <TableCell align="right">{d.status}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            }
+        </div>
     )
 }
