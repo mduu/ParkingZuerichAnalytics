@@ -14,3 +14,6 @@ Content-Type: application/json
 ### Get with custom from and to date
 GET {{host}}/api/parking/P%20West?from=2023-10-01&to=2023-10-03
 Content-Type: application/json
+
+###
+GET {{host}}/api/parking/Feldegg?from=2023-09-22T08:19:32.837+02:00
