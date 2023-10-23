@@ -22,7 +22,7 @@ interface ParkingSlotChartProps {
     selectedParking: string | null,
 }
 
-function subtractDays(date:Date, days: number) {
+function subtractDays(date: Date, days: number) {
     date.setDate(date.getDate() - days);
     return date;
 }
@@ -33,7 +33,7 @@ export function ParkingSlotChart({selectedParking}: ParkingSlotChartProps) {
     const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
-        const queryFrom= subtractDays(new Date(), 14).toISOString();
+        const queryFrom = subtractDays(new Date(), 14).toISOString();
         fetch(`${apiUrl}${selectedParking}?from=${queryFrom}`)
             .then(response => {
                 if (!response.ok) {
@@ -62,9 +62,9 @@ export function ParkingSlotChart({selectedParking}: ParkingSlotChartProps) {
     if (loading) return <LinearProgress/>;
     if (error) return <p>Error: {error.message}</p>;
     if (!data || data.length == 0) return;
-    
+
     const currentWeekStart = subtractDays(new Date(), 7);
-    
+
     const yCurrentWeek = data
         .filter(p => p.timestamp > currentWeekStart)
         .map(p => (p.countFreeSlots));
@@ -75,28 +75,30 @@ export function ParkingSlotChart({selectedParking}: ParkingSlotChartProps) {
     const xLabels = data
         .filter(p => p.timestamp > currentWeekStart)
         .map(p => (p.timestamp));
-    
+
+    const sortedData = data.sort((a, b) => +b.timestamp - +a.timestamp);
+
     return (
         <div>
             {data &&
                 <LineChart
-                    xAxis={[{ 
+                    xAxis={[{
                         scaleType: 'time',
                         data: xLabels,
                         disableTicks: true,
                         disableLine: true,
                     }]}
                     series={[
-                        { 
-                            data: yCurrentWeek, 
-                            label: 'This week free parking slots', 
+                        {
+                            data: yCurrentWeek,
+                            label: 'This week free parking slots',
                             showMark: false,
                             color: 'DodgerBlue',
                             curve: "catmullRom",
                         },
-                        { 
-                            data: yWeekBefore, 
-                            label: 'Week before free parking slots', 
+                        {
+                            data: yWeekBefore,
+                            label: 'Week before free parking slots',
                             showMark: false,
                             color: 'DeepSkyBlue',
                             curve: "catmullRom",
@@ -105,8 +107,8 @@ export function ParkingSlotChart({selectedParking}: ParkingSlotChartProps) {
                     height={300}
                 />
             }
-
-            {data &&
+            
+            {sortedData &&
                 <TableContainer component={Paper}>
                     <Table stickyHeader sx={{'& tr > *:not(:first-child)': {textAlign: 'right'}}}>
                         <TableHead>
@@ -117,7 +119,7 @@ export function ParkingSlotChart({selectedParking}: ParkingSlotChartProps) {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.map((d, i) => (
+                            {sortedData.map((d, i) => (
                                 <TableRow
                                     key={i}
                                     sx={{'&:last-child td, &:last-child th': {border: 0}}}>
