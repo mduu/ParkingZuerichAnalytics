@@ -42,8 +42,8 @@ export function ParkingPicker({selectedParking, onParkingSelected}: ParkingPicke
     if (error) return <p>Error: {error.message}</p>;
 
     return (
-        <div>
-            <FormControl variant="standard" sx={{m: 1, minWidth: 300}}>
+        <div style={{ padding: 10, paddingTop: 15 }}>
+            <FormControl variant="standard" fullWidth={true}>
                 <InputLabel id="demo-simple-select-standard-label">Parking</InputLabel>
                 <Select
                     onChange={handleChange}
