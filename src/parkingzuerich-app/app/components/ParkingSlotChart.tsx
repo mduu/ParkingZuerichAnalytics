@@ -105,6 +105,7 @@ export function ParkingSlotChart({selectedParking}: ParkingSlotChartProps) {
                     }]}
                     series={[
                         {
+                            id: 'currentweek',
                             data: yCurrentWeek,
                             label: 'Free parking',
                             showMark: false,
@@ -112,6 +113,7 @@ export function ParkingSlotChart({selectedParking}: ParkingSlotChartProps) {
                             curve: "catmullRom",
                         },
                         {
+                            id: 'weekbefore',
                             data: yWeekBefore,
                             label: 'Week before',
                             showMark: false,
@@ -120,6 +122,21 @@ export function ParkingSlotChart({selectedParking}: ParkingSlotChartProps) {
                         },
                     ]}
                     height={300}
+                    sx={{
+                        '.MuiLineElement-series-currentweek': {
+                            strokeDasharray: '5 0',
+                        },
+                        '.MuiLineElement-series-weekbefore': {
+                            strokeDasharray: '4 3',
+                            strokeWidth: 1,
+                        },
+                        '.MuiMarkElement-root:not(.MuiMarkElement-highlighted)': {
+                            fill: '#fff',
+                        },
+                        '& .MuiMarkElement-highlighted': {
+                            stroke: 'none',
+                        },
+                    }}
                 />
             }
 
