@@ -68,9 +68,14 @@ export function ParkingSlotChart({selectedParking}: ParkingSlotChartProps) {
     const yCurrentWeek = data
         .filter(p => p.timestamp > currentWeekStart)
         .map(p => (p.countFreeSlots));
-    const yWeekBefore = data
+
+    let yWeekBefore = data
         .filter(p => p.timestamp < currentWeekStart)
         .map(p => (p.countFreeSlots));
+
+    if (yWeekBefore.length > yCurrentWeek.length) {
+        yWeekBefore.length = yCurrentWeek.length;
+    }
 
     const xLabels = data
         .filter(p => p.timestamp > currentWeekStart)
@@ -85,20 +90,30 @@ export function ParkingSlotChart({selectedParking}: ParkingSlotChartProps) {
                     xAxis={[{
                         scaleType: 'time',
                         data: xLabels,
-                        disableTicks: true,
-                        disableLine: true,
+                        labelStyle: {
+                            fontSize: 14,
+                            transform: `translateY(${
+                                // Hack that should be added in the lib latter.
+                                5 * Math.abs(Math.sin((Math.PI * 30) / 180))
+                            }px)`
+                        },
+                        tickLabelStyle: {
+                            angle: 30,
+                            textAnchor: 'start',
+                            fontSize: 12,
+                        },
                     }]}
                     series={[
                         {
                             data: yCurrentWeek,
-                            label: 'This week free parking slots',
+                            label: 'Free parking',
                             showMark: false,
                             color: 'DodgerBlue',
                             curve: "catmullRom",
                         },
                         {
                             data: yWeekBefore,
-                            label: 'Week before free parking slots',
+                            label: 'Week before',
                             showMark: false,
                             color: 'DeepSkyBlue',
                             curve: "catmullRom",
@@ -107,7 +122,7 @@ export function ParkingSlotChart({selectedParking}: ParkingSlotChartProps) {
                     height={300}
                 />
             }
-            
+
             {sortedData &&
                 <TableContainer component={Paper}>
                     <Table stickyHeader sx={{'& tr > *:not(:first-child)': {textAlign: 'right'}}}>
