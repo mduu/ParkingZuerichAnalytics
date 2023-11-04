@@ -125,7 +125,7 @@ export function ParkingSlotChart({selectedParking}: ParkingSlotChartProps) {
 
             {sortedData &&
                 <TableContainer component={Paper}>
-                    <Table stickyHeader sx={{'& tr > *:not(:first-child)': {textAlign: 'right'}}}>
+                    <Table stickyHeader sx={{'& tr > *:not(:first-of-type)': {textAlign: 'right'}}}>
                         <TableHead>
                             <TableRow>
                                 <TableCell>Time</TableCell>
