@@ -10,7 +10,7 @@ namespace ParkingZuerichAnalytics.DataGathering;
 public static class GetParkings
 {
     [FunctionName("GetParkings")]
-    public static async Task<IActionResult> RunAsync(
+    public static IActionResult Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "parking")]
         HttpRequest req,
         ILogger log)
